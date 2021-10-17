@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+    db:
+      image: "store/oracle/database-enterprise:12.2.0.1"
+      restart: "unless-stopped"
+      ports:
+        - 1521:1521
+        - 5500:5500
+      environment: 
+        - "ORACLE_PWD=oracle"
+        - "SOURCE_SCHEMA=change-or-delete-me"
+        - "SOURCE_TABLESPACE=change-or-delete-me"
+        - "EXCLUDE=user"
+      volumes:
+        - ./src/sql/01-dbsetup.sql:/opt/oracle/scripts/startup
+    dbeaver:
+      image: "dbeaver/cloudbeaver:latest"
+      hostname: dbeaver
+      restart: "unless-stopped"
+      ports:
+        - 8978:8978
+      volumes:
+        - ./dbeaver/tmp:/opt/cloudbeaver/workspace
